@@ -19,5 +19,16 @@ DB.create_table :srv_pkgs do
   String :p_name
   String :s_name
   String :created_at
-  primary_key [:p_name, :s_name]
+  primary_key [:p_name, :s_name, :created_at]
+end
+
+DB.create_table :cves do
+  String :name
+  String :status
+  String :description
+  String :references
+  String :phase
+  String :votes
+  String :comments
+  primary_key [:name]
 end
