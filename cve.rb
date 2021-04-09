@@ -6,15 +6,15 @@ DB = Sequel.connect('sqlite://pkg.sqlite3')
 
 recs = []
 
-CSV.foreach(ARGV[0], headers: true, encoding: "iso-8859-1:UTF-8") do |fg|
+CSV.foreach(ARGV[0], headers: true, encoding: "iso-8859-1:UTF-8").each do |fg|
   recs << {
-    name: fg['name'],
-    status: fg['status'],
-    description: fg['description'],
-    references: fg['references'],
-    phase: fg['phase'],
-    votes: fg['votes'],
-    comments: fg['comments']
+    name: fg['Name'],
+    status: fg['Status'],
+    description: fg['Description'],
+    references: fg['References'],
+    phase: fg['Phase'],
+    votes: fg['Votes'],
+    comments: fg['Comments']
   }
   if recs.size > 1000
     DB[:cves].multi_insert(recs)

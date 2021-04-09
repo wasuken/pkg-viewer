@@ -4,29 +4,12 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
-#sec
-  %table.table-bordered
-    %thead
-      %tr
-        %th #{""}
-        - @srv_names.each do |n|
-          %th #{n}
-    %tbody
-      - @pkg_names.each do |pn|
-        %tr
-          %th
-            - if @pkg_tbl[pn]['cves'].count > 0
-              %a(href="/cve?pname=#{pn}")
-                #{pn}
-            - else
-              #{pn}
-          - @srv_names.each do |sn|
-            %td #{@pkg_tbl[sn][pn]}
 
-  %ul.pagination
-    %li.page-item
-      %a.page-link(href='/?page=#{@page-1 >= 0 ? @page-1 : 0}')
-        Prev
-    %li.page-item
-      %a.page-link(href='/?page=#{@page+1 < @max_page ? @page+1 : @max_page}')
-        Next
+%h2.display-3
+  #{@pname}
+
+- @cves.each do |cve|
+  %div.card(style='width:30rem;')
+    %div.card-body
+      %h5.card-title #{cve[:name]}
+      %p.card-text #{cve[:description]}
