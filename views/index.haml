@@ -4,45 +4,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
-#sec
-  %form(action='/' method='GET')
-    %dev.form-group
-      %input(type='hidden' name='page' value='#{@page}')
-      %input(type='hidden' name='offset' value='#{@offset}')
-      %input(type='hidden' name='page' value='#{@page}')
-      %input(type='hidden' name='query' value='#{@query}')
-      %input.form-controll(type='text' name='query' placeholder='search query')
-      %button.btn.btn-primary(type='submit') Search
+<script defer src="/js/bundle.js"></script>
 
-    %p #{@max_page+1} 件中 #{@page+1} 件目
-
-    %ul.pagination
-      %li.page-item
-        %a.page-link(href='/?#{gen_index_get_paging_link(-1)}')
-          Prev
-      %li.page-item
-        %a.page-link(href='/?#{gen_index_get_paging_link(1)}')
-          Next
-
-    %table.table-bordered
-      %thead
-        %tr
-          %th package name(cve link)
-          - @srv_names.each do |n|
-            %th #{n}
-      %tbody
-        - @pkg_names.each do |pn|
-          %tr
-            %th
-              %a(href="/cve?pname=#{pn}")
-                #{pn}
-            - @srv_names.each do |sn|
-              %td #{@pkg_tbl[sn][pn]}
-
-    %ul.pagination
-      %li.page-item
-        %a.page-link(href='/?page=#{@page-1 >= 0 ? @page-1 : 0}')
-          Prev
-      %li.page-item
-        %a.page-link(href='/?page=#{@page+1 < @max_page ? @page+1 : @max_page}')
-          Next
+%body
