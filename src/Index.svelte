@@ -33,6 +33,8 @@
   let page = 0;
   let cache = true;
 
+  let max_page = Number.MAX_VALUE;
+
   // CVEイベントハンドラ
   // 1. パッケージ名からCVEを検索して返してくれるAPIへリクエスト
   // 2. 取得したCVE情報をモーダルあたりで描画。
@@ -64,6 +66,7 @@
     return searchReq(params);
   }
   function handleMovePage(i) {
+    if (page + i < 0 || page + i > max_page) return;
     page = page + i;
     promise = searchReqUseElem();
   }
@@ -95,7 +98,12 @@
 {#await promise}
   <p>...waiting</p>
 {:then data}
-  <p>{data.page + 1} / {data.max_page + 1} 件</p>
+  {(() => {
+    max_page = data.max_page;
+    page = data.page;
+    return '';
+  })()}
+  <p>{page + 1} / {data.max_page + 1} 件</p>
   <nav aria-label="Page navigation example">
     <ul class="pagination">
       <li class="page-item">
@@ -103,13 +111,6 @@
           class="page-link"
           on:click={() => handleMovePage(-1)}>Previous</button>
       </li>
-      {#each range(1, 6, 1) as i}
-        <li class="page-item">
-          <button
-            class="page-link"
-            on:click={() => handleMovePage(i)}>{i}</button>
-        </li>
-      {/each}
       <li class="page-item">
         <button
           class="page-link"
@@ -135,6 +136,21 @@
       {/each}
     </tbody>
   </table>
+  <p>{page + 1} / {data.max_page + 1} 件</p>
+  <nav aria-label="Page navigation example">
+    <ul class="pagination">
+      <li class="page-item">
+        <button
+          class="page-link"
+          on:click={() => handleMovePage(-1)}>Previous</button>
+      </li>
+      <li class="page-item">
+        <button
+          class="page-link"
+          on:click={() => handleMovePage(1)}>Next</button>
+      </li>
+    </ul>
+  </nav>
 {:catch error}
   <p style="color: red">{error.message}</p>
 {/await}
