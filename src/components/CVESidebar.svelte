@@ -40,7 +40,7 @@
   <nav class="sidebar">
     <div class="sidebar-header">
       <p>
-        <button class="btn btn-primary" on:click={handleCloseBtn}>
+        <button class="btn btn-success" on:click={handleCloseBtn}>
           Close
         </button>
       </p>
@@ -52,7 +52,6 @@
           <div class="card">
             <div class="card-header">[{cve.status}]{cve.name}</div>
             <div class="card-body">{cve.description}</div>
-            <div class="card-footer">{cve.status}</div>
           </div>
         {/each}
       {:catch error}

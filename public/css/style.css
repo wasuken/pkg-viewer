@@ -16,8 +16,12 @@ table {
   max-width: 400px;
 
   background: #7386D5;
+  padding: 20px;
+}
+.sidebar h3 {
+  color: white;
 }
 
 .sidebar.active {
-  margin-right: -250px;
+  margin-right: -400px;
 }
