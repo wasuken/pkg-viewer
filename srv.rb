@@ -38,8 +38,32 @@ get '/cve' do
   @pname = params[:pname]
   return unless @pname
 
-  @cves = cve('202').where(Sequel.like(:description, "%#{@pname}%"))
+  @cves = cve('202').where(Sequel.like(:description, "%#{@pname}%")).limit(10)
   haml :cve
+end
+
+get '/api/v0/cves' do
+  content_type :json
+  name = params[:name]
+  p params[:name]
+  resp = {
+    status: 200,
+    msg: ''
+  }
+  if name.nil?
+    resp[:status] = 400
+    resp[:msg] = 'Invalid parameter[name]'
+    response.body = JSON.dump(resp)
+  else
+    resp[:data] =
+      cve('202')
+        .where(Sequel.like(:description, "%#{name}%"))
+        .order(Sequel.desc(:name))
+        .limit(10)
+        .to_a
+
+    response.body = JSON.dump(resp)
+  end
 end
 
 get '/api/v0/pkgs' do
