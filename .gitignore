@@ -3,3 +3,5 @@ bundle
 *.csv
 node_modules
 public/js/
+config.json
+*.sh

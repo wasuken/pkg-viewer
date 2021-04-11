@@ -3,6 +3,7 @@ require 'sinatra'
 require 'haml'
 require 'sequel'
 require 'json'
+require 'benchmark'
 
 set :bind, '0.0.0.0'
 DB = Sequel.connect('sqlite://pkg.sqlite3')
@@ -11,28 +12,35 @@ def cve(year)
   DB[:cves].where(Sequel.like(:name, "CVE-#{year}%"))
 end
 
-def gen_pkg_tbl(srv_names)
-  latest = DB[:srv_pkgs].max(:created_at)
+def gen_pkg_names
+  DB[:srv_pkgs].to_a.map{ |x| x[:p_name].split('/')[0]}.uniq
+end
 
-  pkgs = DB[:srv_pkgs]
-           .join(:srvs, name: :s_name)
-           .join(:pkgs, Sequel[:pkgs][:name] => Sequel[:srv_pkgs][:p_name])
-           .where(created_at: latest)
+def gen_pkg_tbl(srv_names, pkgs)
   pkg_tbl = {}
-  srv_names.each do |s_name|
-    pkgs.where(s_name: s_name).to_a.each do |p|
-      pkg_tbl[s_name] = {  } unless pkg_tbl[s_name]
-      p_name = p[:name].split('/')[0]
-      pkg_tbl[s_name][p_name] = p[:version]
-    end
+  srv_names.each do |s|
+    pkg_tbl[s] = {  }
+  end
+  pkgs.each do |p|
+    s_name = p[:s_name]
+    p_name = p[:p_name].split('/')[0]
+    pkg_tbl[s_name][p_name] = p[:version]
   end
   pkg_tbl
 end
 
+pkgs = DB[:srv_pkgs]
+         .where(created_at: DB[:srv_pkgs].max(:created_at))
+         .to_a
+
 pkg_tbl_cache = {
   cache: true,
-  data: gen_pkg_tbl(DB[:srvs].to_a.map{ |x| x[:name]}.sort)
+  data: gen_pkg_tbl(DB[:srvs].to_a.map{ |x| x[:name]}.sort, pkgs),
+  pkg_names: gen_pkg_names(),
+  pkgs: pkgs
 }
+
+pkgs = nil
 
 get '/cve' do
   @pname = params[:pname]
@@ -76,8 +84,11 @@ get '/api/v0/pkgs' do
   page = 0 if page < 0
   offset = 30 if offset <= 0
 
-  pkg_names = DB[:pkgs].to_a.map{ |x| x[:name].split('/')[0]}.uniq
+  # pkg_names = DB[:srv_pkgs].to_a.map{ |x| x[:p_name].split('/')[0]}.uniq
+  pkg_names = pkg_tbl_cache[:pkg_names]
+
   pkg_names = pkg_names.select{ |p| p =~ (Regexp.new query) } unless query.empty?
+
   max_page = (pkg_names.size / offset).ceil
 
   page = max_page if page > max_page
@@ -88,13 +99,13 @@ get '/api/v0/pkgs' do
 
   srv_names = DB[:srvs].to_a.map{ |x| x[:name]}.sort
 
-  if(cache && pkg_tbl_cache[:cache])
+  if(cache && query.empty? && pkg_tbl_cache[:cache])
     puts "use cache"
     pkg_tbl = pkg_tbl_cache[:data]
   else
-    pkg_tbl = gen_pkg_tbl(srv_names)
-    pkg_tbl_cache[:data] = pkg_tbl
-    pkg_tbl_cache[:cache] = true
+    pkg_tbl = gen_pkg_tbl(srv_names, pkg_tbl_cache[:pkgs])
+    # pkg_tbl_cache[:data] = pkg_tbl
+    # pkg_tbl_cache[:cache] = true
   end
   resp = {
     data: pkg_tbl,

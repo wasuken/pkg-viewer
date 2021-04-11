@@ -1,11 +1,13 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    ed25519 (1.2.4)
     haml (5.2.1)
       temple (>= 0.8.0)
       tilt
     mustermann (1.1.1)
       ruby2_keywords (~> 0.0.1)
+    net-ssh (6.1.0)
     rack (2.2.3)
     rack-protection (2.1.0)
       rack
@@ -24,7 +26,9 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  ed25519
   haml
+  net-ssh
   sequel
   sinatra
   sqlite3

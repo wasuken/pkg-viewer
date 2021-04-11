@@ -99,6 +99,7 @@
   <p>...waiting</p>
 {:then data}
   <div class="wrapper">
+    <CVE bind:name={chooseCVE.name} bind:show={chooseCVE.status} />
     <div class="content">
       <p>
         search:
@@ -170,7 +171,6 @@
         </ul>
       </nav>
     </div>
-    <CVE bind:name={chooseCVE.name} bind:show={chooseCVE.status} />
   </div>
 {:catch error}
   <p style="color: red">{error.message}</p>
