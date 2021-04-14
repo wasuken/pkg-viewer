@@ -2,6 +2,6 @@
 bundle
 *.csv
 node_modules
-public/js/
+app/public/js/
 config.json
 *.sh

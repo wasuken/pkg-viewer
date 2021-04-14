@@ -1,0 +1,17 @@
+version: '3'
+services:
+  mysql:
+    image: mysql:latest
+    volumes:
+      - ./my.cnf:/etc/mysql/conf.d/my.cnf
+    restart: always
+    ports:
+      - "3306:3306"
+    MYSQL_ROOT_PASSWORD: test
+
+  app:
+    build: ./
+    volumes:
+      - ./app:/app
+    ports:
+      - "5050:80"

@@ -1,0 +1,14 @@
+{
+  "hosts": [
+	{
+	  "user": "hoge",
+	  "host": "example.com",
+	  "ps": "test"
+	},
+	{
+	  "user": "huga",
+	  "host": "a.example.com",
+	  "ps": "testaaa"
+	}
+  ]
+}
