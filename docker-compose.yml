@@ -1,17 +1,33 @@
 version: '3'
 services:
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    environment:
+      - PMA_ARBITRARY=1
+      - PMA_HOST=mysql
+      - PMA_USER=root
+      - PMA_PASSWORD=test
+    links:
+      - mysql
+    ports:
+      - 5555:80
+
   mysql:
-    image: mysql:latest
+    image: mysql:5.7
     volumes:
       - ./my.cnf:/etc/mysql/conf.d/my.cnf
     restart: always
     ports:
       - "3306:3306"
-    MYSQL_ROOT_PASSWORD: test
+    environment:
+      MYSQL_ROOT_PASSWORD: test
+      MYSQL_DATABASE: pkg
 
   app:
     build: ./
     volumes:
       - ./app:/app
+    env_file:
+      - ./.app.env
     ports:
-      - "5050:80"
+      - "4567:4567"

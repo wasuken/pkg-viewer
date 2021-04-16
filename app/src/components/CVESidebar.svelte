@@ -3,7 +3,9 @@
   export let show = false;
   let old_name = "";
 
-  const baseAPIURL = "http://localhost:4567/api/v0";
+  const baseURL = "HOST";
+
+  const baseAPIURL = `${baseURL}/api/v0`;
   let promise = Promise.resolve([]);
 
   $: if (old_name === "" || old_name != name) {

@@ -1,11 +1,25 @@
 FROM ruby:2.7.3
 
+WORKDIR /tmp
+
+RUN apt update -y
+RUN apt install -y build-essential gcc make mariadb-client openssl curl gnupg
+
+RUN curl -sL https://deb.nodesource.com/setup_12.x  | bash -
+RUN apt-get -y install nodejs
+
 WORKDIR /app
 
-RUN bundle config set path 'vendor/bundle'
+COPY app/Gemfile app/Gemfile.lock app/package.json app/create.rb /app/
 
-RUN bundle exec ruby create.rb
+RUN bundle install
 
-RUN bundle exec ruby cve.rb cve.csv
+# ENTRYPOINT ["/bin/sh", "-c", "while :; do sleep 10; done"]
 
-ENTRYPOINT bundle exec ruby srv.rb
+COPY ./run.sh /run.sh
+RUN chmod +x /run.sh
+
+COPY ./wait.sh /wait.sh
+RUN chmod +x /wait.sh
+
+ENTRYPOINT [ "/wait.sh" ]

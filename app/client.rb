@@ -3,7 +3,14 @@ require 'json'
 require 'sequel'
 require 'set'
 
-DB = Sequel.connect('sqlite://pkg.sqlite3')
+# DB = Sequel.connect('sqlite://pkg.sqlite3')
+
+DB = Sequel.mysql2(
+  host: ENV['DB_HOST'],
+  user: ENV['DB_USER'],
+  password: ENV['DB_PASS'],
+  database: ENV['DB_NAME'],
+)
 
 hosts = JSON.parse(File.read('./config.json'))['hosts']
 

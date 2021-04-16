@@ -5,3 +5,4 @@ node_modules
 app/public/js/
 config.json
 *.sh
+*.env

@@ -5,8 +5,16 @@ require 'sequel'
 require 'json'
 require 'benchmark'
 
-set :bind, '0.0.0.0'
-DB = Sequel.connect('sqlite://pkg.sqlite3')
+configure do
+  set :bind, '0.0.0.0'
+end
+
+DB = Sequel.mysql2(
+  host: ENV['DB_HOST'],
+  user: ENV['DB_USER'],
+  password: ENV['DB_PASS'],
+  database: ENV['DB_NAME'],
+)
 
 def cve(year)
   DB[:cves].where(Sequel.like(:name, "CVE-#{year}%"))

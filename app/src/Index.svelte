@@ -31,7 +31,8 @@
     status: false,
   };
 
-  const baseAPIURL = "http://localhost:4567/api/v0";
+  const baseURL = "HOST";
+  const baseAPIURL = `${baseURL}/api/v0`;
   let promise = Promise.resolve([]);
 
   let query = "";
