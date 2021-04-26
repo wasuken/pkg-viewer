@@ -13,8 +13,10 @@ services:
       - 5555:80
 
   mysql:
-    image: mysql:5.7
+    build: ./mysql/
     volumes:
+      - db-store:/var/lib/mysql
+      - db-log-store:/var/log/mysql
       - ./my.cnf:/etc/mysql/conf.d/my.cnf
     restart: always
     ports:
@@ -31,3 +33,7 @@ services:
       - ./.app.env
     ports:
       - "4567:4567"
+
+volumes:
+  db-store:
+  db-log-store:
