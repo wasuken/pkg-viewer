@@ -3,10 +3,10 @@ services:
   phpmyadmin:
     image: phpmyadmin/phpmyadmin:latest
     environment:
-      - PMA_ARBITRARY=1
-      - PMA_HOST=mysql
-      - PMA_USER=root
-      - PMA_PASSWORD=test
+      - "PMA_ARBITRARY=1"
+      - "PMA_HOST=$DB_HOST"
+      - "PMA_USER=$DB_USER"
+      - "PMA_PASSWORD=$DB_PASS"
     links:
       - mysql
     ports:

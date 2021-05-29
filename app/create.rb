@@ -10,13 +10,13 @@ DB = Sequel.mysql2(
   database: ENV['DB_NAME'],
 )
 
-DB.create_table :srvs do
+DB.create_table? :srvs do
   String :name, size: 255
   String :type, size: 255
   primary_key [:name]
 end
 
-DB.create_table :srv_pkgs do
+DB.create_table? :srv_pkgs do
   String :p_name, size: 255
   String :s_name, size: 255
   String :version, size: 255
@@ -24,7 +24,7 @@ DB.create_table :srv_pkgs do
   primary_key [:p_name, :s_name, :created_at]
 end
 
-DB.create_table :cves do
+DB.create_table? :cves do
   String :name, size: 255
   String :status, size: 255
   String :description, text: true

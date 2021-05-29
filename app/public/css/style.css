@@ -1,8 +1,10 @@
 body {
   background: #fafafa;
-}
-table {
   width: 100%;
+}
+
+.content{
+  background: #fafafa;
 }
 
 .wrapper {

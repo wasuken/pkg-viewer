@@ -93,9 +93,6 @@
   handleSearch();
 </script>
 
-<style>
-</style>
-
 {#await promise}
   <p>...waiting</p>
 {:then data}
@@ -117,57 +114,61 @@
       {(() => {
         max_page = data.max_page;
         page = data.page;
-        return '';
+        return "";
       })()}
       <p>{page + 1} / {data.max_page + 1} 件</p>
       <nav>
         <ul class="pagination">
           <li class="page-item">
-            <button
-              class="page-link"
-              on:click={() => handleMovePage(-1)}>Previous</button>
+            <button class="page-link" on:click={() => handleMovePage(-1)}
+              >Previous</button
+            >
           </li>
           <li class="page-item">
-            <button
-              class="page-link"
-              on:click={() => handleMovePage(1)}>Next</button>
+            <button class="page-link" on:click={() => handleMovePage(1)}
+              >Next</button
+            >
           </li>
         </ul>
       </nav>
-      <table class="table">
-        <thead>
-          <th>Package Name</th>
-          {#each data.srv_names as srv}
-            <th>{srv}</th>
-          {/each}
-        </thead>
-        <tbody>
-          {#each data.pkg_names as pkg}
-            <tr>
-              <td>
-                <button
-                  class="btn btn-outline-primary"
-                  on:click={() => handlePkgBtnClick(pkg)}>{pkg}</button>
-              </td>
-              {#each data.srv_names as srv}
-                <td>{data.data[srv][pkg] ?? ''}</td>
-              {/each}
-            </tr>
-          {/each}
-        </tbody>
-      </table>
+      <div class="table-responsive">
+        <table class="table table-sm">
+          <thead>
+            <th>Package Name</th>
+            {#each data.srv_names as srv}
+              <th>{srv}</th>
+            {/each}
+          </thead>
+          <tbody>
+            {#each data.pkg_names as pkg}
+              <tr>
+                <td>
+                  <button
+                    class="btn btn-outline-primary"
+                    on:click={() => handlePkgBtnClick(pkg.name)}
+                    >{pkg.fullname}</button
+                  >
+                </td>
+                {#each data.srv_names as srv}
+                  <td>{data.data[srv][pkg.fullname] ?? ""}</td>
+                {/each}
+              </tr>
+            {/each}
+          </tbody>
+        </table>
+      </div>
       <p>{page + 1} / {data.max_page + 1} 件</p>
       <nav aria-label="Page navigation example">
         <ul class="pagination">
           <li class="page-item">
-            <button
-              class="page-link"
-              on:click={() => handleMovePage(-1)}>Previous</button>
+            <button class="page-link" on:click={() => handleMovePage(-1)}
+              >Previous</button
+            >
           </li>
           <li class="page-item">
-            <button
-              class="page-link"
-              on:click={() => handleMovePage(1)}>Next</button>
+            <button class="page-link" on:click={() => handleMovePage(1)}
+              >Next</button
+            >
           </li>
         </ul>
       </nav>
@@ -176,3 +177,6 @@
 {:catch error}
   <p style="color: red">{error.message}</p>
 {/await}
+
+<style>
+</style>

@@ -35,7 +35,7 @@ def gen_pkg_tbl(srv_names, pkgs)
   end
   pkgs.each do |p|
     s_name = p[:s_name]
-    p_name = p[:p_name].split('/')[0]
+    p_name = p[:p_name]
     pkg_tbl[s_name][p_name] = p[:version]
   end
   pkg_tbl
@@ -99,7 +99,7 @@ get '/api/v0/pkgs' do
   # pkg_names = DB[:srv_pkgs].to_a.map{ |x| x[:p_name].split('/')[0]}.uniq
   pkg_names = pkg_tbl_cache[:pkg_names]
 
-  pkg_names = pkg_names.select{ |p| p[:name] =~ (Regexp.new query) } unless query.empty?
+  pkg_names = pkg_names.select{ |p| p[:fullname] =~ (Regexp.new query) } unless query.empty?
 
   max_page = (pkg_names.size / offset).ceil
 
@@ -127,7 +127,7 @@ get '/api/v0/pkgs' do
   pkg_tbl = gen_pkg_tbl(srv_names, pkgs)
   resp = {
     data: pkg_tbl,
-    pkg_names: pkg_names_short,
+    pkg_names: pkg_names,
     srv_names: srv_names,
     status: 200,
     msg: '',
